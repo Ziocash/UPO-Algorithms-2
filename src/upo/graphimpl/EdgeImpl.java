@@ -12,21 +12,18 @@ public class EdgeImpl implements Edge
 	@Override
 	public double getEdgeWeight()
 	{
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public Set<Vertex> getVertices()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Graph getGraph()
 	{
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

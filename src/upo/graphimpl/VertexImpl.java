@@ -22,6 +22,8 @@ public class VertexImpl extends Vertex
 	@Override
 	public Graph getGraph()
 	{
+		Graph g = new GraphImpl();
+		
 		return null;
 	}
 
