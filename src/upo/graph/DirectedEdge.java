@@ -1,6 +1,7 @@
 package upo.graph;
 
-public interface DirectedEdge extends Edge {
+public interface DirectedEdge extends Edge 
+{
 	/**
      * Retrieves the source of this edge.
      *

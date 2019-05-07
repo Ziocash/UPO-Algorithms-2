@@ -1,6 +1,7 @@
 package upo.graph;
 
-public enum SearchType {
+public enum SearchType 
+{
 	/**
 	 * Breadth First Search (single visit).
 	 */

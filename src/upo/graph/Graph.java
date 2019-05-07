@@ -6,7 +6,8 @@ import java.util.*;
  * The root interface in the graph hierarchy.
  *
  */
-public interface Graph extends Iterable<Vertex> {
+public interface Graph extends Iterable<Vertex> 
+{
 
 	/**
 	 * The default weight for an edge.

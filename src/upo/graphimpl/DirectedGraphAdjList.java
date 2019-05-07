@@ -134,8 +134,9 @@ public class DirectedGraphAdjList implements Graph
 	 * @see upo.graph.Graph#isDirected()
 	 */
 	@Override
-	public boolean isDirected() {
-		// TODO Auto-generated method stub
+	public boolean isDirected() 
+	{
+		
 		return false;
 	}
 

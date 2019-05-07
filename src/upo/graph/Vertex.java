@@ -1,6 +1,7 @@
 package upo.graph;
 
-public abstract class Vertex implements Iterable<Vertex> {
+public abstract class Vertex implements Iterable<Vertex> 
+{
 	
 	/**
 	 * The label of this vertex
@@ -12,7 +13,8 @@ public abstract class Vertex implements Iterable<Vertex> {
 	 *  
 	 * @param label the name of the vertex.
 	 */
-	public Vertex(String label) {
+	public Vertex(String label) 
+	{
 		this.label = label;
 	}
 	
@@ -21,7 +23,8 @@ public abstract class Vertex implements Iterable<Vertex> {
 	 * 
 	 * @return a String which is the label of this vertex.
 	 */
-	public String getLabel() {
+	public String getLabel() 
+	{
 		return this.label;
 	}
 	
@@ -31,7 +34,8 @@ public abstract class Vertex implements Iterable<Vertex> {
 	 * @return a string representation of this vertex
 	 */
 	@Override
-    public String toString() {
+    public String toString() 
+	{
 		return this.label;
 	}
 	
@@ -51,7 +55,8 @@ public abstract class Vertex implements Iterable<Vertex> {
 	 * @return true if the given object represents a vertex with the same label of this vertex, false otherwise
 	 */
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object o) 
+	{
 		return (o != null) && (o instanceof Vertex) && ((Vertex) o).getLabel().equals(this.getLabel()); 
 	}
 

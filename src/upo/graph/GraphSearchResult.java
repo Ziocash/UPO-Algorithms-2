@@ -4,7 +4,8 @@ package upo.graph;
  * The interface describing the result of a visit in a Graph.
  *
  */
-public interface GraphSearchResult extends Iterable<Vertex> {
+public interface GraphSearchResult extends Iterable<Vertex> 
+{
 	
 	/**
      * Returns the type of the search (e.g., BFS) which generates this result
