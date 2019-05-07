@@ -19,6 +19,10 @@ import upo.graph.Vertex;
  */
 public class DirectedGraphAdjMatr implements Graph
 {
+	private int AdjMatrix[][];
+	private Set<Edge> edges;
+	private Set<Vertex> vertices;
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Iterable#iterator()
 	 */
@@ -35,8 +39,8 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public boolean addVertex(Vertex v) 
 	{
-		
-		return false;
+		vertices.add(v);
+		return containsVertex(v);
 	}
 
 	/* (non-Javadoc)
@@ -45,7 +49,8 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public boolean containsVertex(Vertex v) 
 	{
-		
+		if(vertices.contains(v))
+			return true;
 		return false;
 	}
 
@@ -55,7 +60,7 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public boolean removeVertex(Vertex v) 
 	{
-		
+		vertices.remove(v);
 		return false;
 	}
 
@@ -63,8 +68,10 @@ public class DirectedGraphAdjMatr implements Graph
 	 * @see upo.graph.Graph#vertexSet()
 	 */
 	@Override
-	public Set<Vertex> vertexSet() {
-		// TODO Auto-generated method stub
+	public Set<Vertex> vertexSet() 
+	{
+		if(!vertices.isEmpty())
+			return vertices;
 		return null;
 	}
 
@@ -74,8 +81,9 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public Edge addEdge(Vertex sourceVertex, Vertex targetVertex) 
 	{
-		
-		return null;
+		Edge e = new EdgeImpl(targetVertex, targetVertex, 0);
+		edges.add(e);
+		return e;
 	}
 
 	/* (non-Javadoc)
@@ -84,7 +92,9 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public boolean containsEdge(Vertex sourceVertex, Vertex targetVertex) 
 	{
-		
+		for(Edge e : edges)
+			if(e.getVertices().contains(sourceVertex) && e.getVertices().contains(targetVertex))
+				return true;
 		return false;
 	}
 
@@ -94,7 +104,8 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public Set<Edge> edgeSet() 
 	{
-		
+		if(!edges.isEmpty())
+			return edges;
 		return null;
 	}
 
@@ -144,7 +155,12 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public Edge removeEdge(Vertex sourceVertex, Vertex targetVertex) 
 	{
-		
+		for(Edge e : edges)
+			if(e.getVertices().contains(sourceVertex) && e.getVertices().contains(targetVertex))
+			{
+				edges.remove(e);
+				return e;
+			}
 		return null;
 	}
 
@@ -173,8 +189,11 @@ public class DirectedGraphAdjMatr implements Graph
 	@Override
 	public GraphSearchResult visit(SearchType type) throws UnsupportedOperationException 
 	{
-		
-		return null;
+		switch(type)
+		{
+					
+			default: throw new UnsupportedOperationException("Il tipo di ricerca inserito non esiste.");
+		}
 	}
 
 	/* (non-Javadoc)
@@ -191,8 +210,9 @@ public class DirectedGraphAdjMatr implements Graph
 	 * @see upo.graph.Graph#isDAG()
 	 */
 	@Override
-	public boolean isDAG() {
-		// TODO Auto-generated method stub
+	public boolean isDAG() 
+	{
+		
 		return false;
 	}
 

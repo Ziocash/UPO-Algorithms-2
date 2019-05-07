@@ -12,7 +12,11 @@ import upo.graph.Vertex;
 
 public class GraphImpl implements Graph
 {
-
+	public GraphImpl()
+	{
+		
+	}
+	
 	@Override
 	public Iterator<Vertex> iterator()
 	{
