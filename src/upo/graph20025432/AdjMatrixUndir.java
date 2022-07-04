@@ -227,17 +227,29 @@ public class AdjMatrixUndir implements Graph {
 
     @Override
     public boolean equals(Object graph) {
+        if (graph == null)
+            return false;
+        if (graph.getClass() != getClass())
+            return false;
         Graph comparedTo = (AdjMatrixUndir) graph;
 
-        for (int i = 0; i < vertices.size(); i++)
-            for (int j = 0; j < vertices.size(); j++)
+        if (comparedTo.size() != size())
+            return false;
+
+        for (int i = 0; i < size(); i++)
+            if (comparedTo.getVertexLabel(i) != vertices.get(i))
+                return false;
+        for (int i = 0; i < size(); i++)
+            for (int j = 0; j < size(); j++)
                 if (comparedTo.containsEdge(comparedTo.getVertexLabel(i),
                         comparedTo.getVertexLabel(j)) != containsEdge(vertices.get(i), vertices.get(j)))
                     return false;
-        for (int i = 0; i < vertices.size(); i++)
-            if (comparedTo.getVertexLabel(i) != vertices.get(i))
-                return false;
 
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + vertices.size() + Arrays.hashCode(matrix);
     }
 }
