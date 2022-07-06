@@ -2,14 +2,13 @@ package upo.graph20025432;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.junit.platform.console.shadow.picocli.CommandLine.Help.Visibility;
 
 import upo.graph.base.Graph;
 import upo.graph.base.VisitForest;
@@ -55,14 +54,34 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
 
     @Override
     public Set<Set<String>> connectedComponents() throws UnsupportedOperationException {
-        var componentsList = new TreeSet<Set<String>>();
+        Set<Set<String>> componentsList = new HashSet<>();
         VisitForest visit = new VisitForest(this, VisitType.DFS);
-        for (var elem : vertices) {
-            if (visit.getColor(elem) == Color.WHITE) {
-                var components = getDFSTree(elem);
+        for (var element : vertices)
+            if (visit.getColor(element) == Color.WHITE)
+                componentsList.add(getDFSTree(visit, element));
+        return componentsList;
+    }
+
+    protected Set<String> getDFSTree(VisitForest visit, String vertex) {
+        Set<String> setAux = new HashSet<>();
+        recursiveDFS(visit, vertex, setAux);
+        return setAux;
+    }
+
+    protected void recursiveDFS(VisitForest forest, String vertex, Set<String> set) {
+        forest.setColor(vertex, Color.GRAY);
+        forest.setStartTime(vertex, time);
+        time++;
+        set.add(vertex);
+        for (var element : getAdjacent(vertex)) {
+            if (forest.getColor(element) == Color.WHITE) {
+                forest.setParent(element, vertex);
+                recursiveDFS(forest, element, set);
             }
         }
-        return componentsList;
+        forest.setColor(vertex, Color.BLACK);
+        forest.setEndTime(vertex, time);
+        time++;
     }
 
     @Override
@@ -72,8 +91,8 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
         if (!containsVertex(vertex2))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
 
-        return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)] != 0
-                && matrix[getVertexIndex(vertex2)][getVertexIndex(vertex1)] != 0;
+        return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)] > 0
+                && matrix[getVertexIndex(vertex2)][getVertexIndex(vertex1)] > 0;
     }
 
     @Override
@@ -91,8 +110,8 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex + "\'.");
         Set<String> internalSet = new TreeSet<>();
         for (String element : vertices)
-            if (matrix[getVertexIndex(vertex)][getVertexIndex(element)] == 1
-                    || matrix[getVertexIndex(element)][getVertexIndex(vertex)] == 1)
+            if (matrix[getVertexIndex(vertex)][getVertexIndex(element)] > 0
+                    || matrix[getVertexIndex(element)][getVertexIndex(vertex)] > 0) 
                 internalSet.add((element));
         return internalSet;
     }
@@ -125,8 +144,8 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     public VisitForest getDFSTOTForest(String vertex) throws UnsupportedOperationException, IllegalArgumentException {
         if (!containsVertex(vertex))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex + "\'.");
+        time = 1;
         VisitForest forest = new VisitForest(this, VisitType.DFS_TOT);
-        recursiveDFS(forest, vertex);
         for (var element : vertices) {
             if (forest.getColor(element) == Color.WHITE)
                 recursiveDFS(forest, element);
@@ -134,8 +153,7 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
         return forest;
     }
 
-    // Visits
-
+    // Visit
     protected void recursiveDFS(VisitForest forest, String vertex) {
         forest.setColor(vertex, Color.GRAY);
         forest.setStartTime(vertex, time);
@@ -169,7 +187,7 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     public VisitForest getDFSTree(String vertex) throws UnsupportedOperationException, IllegalArgumentException {
         if (!containsVertex(vertex))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex + "\'.");
-        time = 0;
+        time = 1;
         VisitForest visit = new VisitForest(this, VisitType.DFS);
         recursiveDFS(visit, vertex);
         return visit;
@@ -225,15 +243,22 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     }
 
     @Override
-    public void removeEdge(String arg0, String arg1) throws IllegalArgumentException, NoSuchElementException {
-        // TODO Auto-generated method stub
+    public void removeEdge(String vertex1, String vertex2) throws IllegalArgumentException, NoSuchElementException {
+        if (!containsVertex(vertex1))
+            throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
+        if (!containsVertex(vertex2))
+            throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
 
+        if (!containsEdge(vertex1, vertex2))
+            throw new NoSuchElementException("Cannot retrieve an unexisting weight.");
+
+        setEdgeWeight(vertex1, vertex2, 0);
     }
 
     @Override
     public void removeVertex(String vertex) throws NoSuchElementException {
         int index = getVertexIndex(vertex);
-        if (index > 0) {
+        if (index > -1) {
             vertices.remove(vertex);
             matrix = escapeColumn(index);
         } else
@@ -291,8 +316,12 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     @Override
     public double getEdgeWeight(String vertex1, String vertex2)
             throws IllegalArgumentException, NoSuchElementException {
-        // TODO Auto-generated method stub
-        return 0;
+        if (!containsVertex(vertex1))
+            throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
+        if (!containsVertex(vertex2))
+            throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
+        
+        return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)];
     }
 
     @Override
