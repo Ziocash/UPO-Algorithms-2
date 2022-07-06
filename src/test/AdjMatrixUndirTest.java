@@ -3,9 +3,11 @@ package test;
 import org.junit.Test;
 
 import upo.graph20025432.AdjMatrixUndir;
+import upo.graph20025432.AdjMatrixUndirWeight;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -45,9 +47,7 @@ public class AdjMatrixUndirTest {
         matrixUndir.addEdge("A", "B");
         assertTrue(matrixUndir.containsEdge("A", "B"));
         assertTrue(matrixUndir.containsEdge("B", "A"));
-        assertThrows(IllegalArgumentException.class, () -> {
-            matrixUndir.containsEdge("C", "D");
-        });
+        assertThrows(IllegalArgumentException.class, () -> matrixUndir.containsEdge("C", "D"));
     }
 
     @Test
@@ -89,5 +89,51 @@ public class AdjMatrixUndirTest {
 
         assertFalse(matrixUndir.equals(tempEqualsMatrix));
 
+    }
+
+    @Test
+    public void testFalseEqualsDifferentClass() {
+        AdjMatrixUndirWeight anotherMatrix = new AdjMatrixUndirWeight();
+        assertFalse(matrixUndir.equals(anotherMatrix));
+        // Different classes lead to false result
+    }
+
+    @Test
+    public void testExceptionCallingEdgeWeight() {
+        assertThrows(UnsupportedOperationException.class, () -> matrixUndir.setEdgeWeight("A", "B", 1.0));
+        assertDoesNotThrow(() -> matrixUndir.getEdgeWeight("A", "B"));
+    }
+
+    @Test
+    public void testDFSTree() {
+        int num = 6;
+        for (char a = 'A'; a < 'A' + num; a++)
+            matrixUndir.addVertex(new String(new char[] { a }));
+        matrixUndir.addEdge("A", "B");
+        matrixUndir.addEdge("A", "C");
+        matrixUndir.addEdge("D", "B");
+        matrixUndir.addEdge("E", "A");
+        matrixUndir.addEdge("E", "F");
+        matrixUndir.getDFSTOTForest("A");
+    }
+
+    @Test
+    public void testBFSTree() {
+        int num = 6;
+        for (char a = 'A'; a < 'A' + num; a++)
+            matrixUndir.addVertex(new String(new char[] { a }));
+        matrixUndir.addEdge("A", "B");
+        matrixUndir.addEdge("A", "C");
+        matrixUndir.addEdge("D", "B");
+        matrixUndir.addEdge("E", "A");
+        matrixUndir.addEdge("E", "F");
+        var visit = matrixUndir.getBFSTree("A");
+        String[] vertices = new String[matrixUndir.size()];
+        for (int i = matrixUndir.getVertexIndex("A") + 1; i < matrixUndir.size(); i++) {
+            char a = (char) ('A' + i);
+            vertices[i] = visit.getPartent(new String(new char[] { a }));
+        }
+        var arrayResult = new String[] { null, "A", "A", "B", "A", "E" };
+        assertArrayEquals(arrayResult, vertices);
     }
 }
