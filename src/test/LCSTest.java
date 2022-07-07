@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.Test;
 
-import upo.progdin.LongestCommonSubsequence;
+import upo.progdin20025432.LongestCommonSubsequence;
 
 public class LCSTest {
     @Test
