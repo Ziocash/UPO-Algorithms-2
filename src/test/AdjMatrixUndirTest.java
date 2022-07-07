@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.NoSuchElementException;
-
 import org.junit.Test;
 
 import upo.graph20025432.AdjMatrixUndir;
@@ -187,11 +185,19 @@ public class AdjMatrixUndirTest {
         assertThrows(IllegalArgumentException.class, () -> matrixUndir.containsEdge("A", "E"));
         assertFalse(matrixUndir.containsVertex("A"));
         var cc = matrixUndir.connectedComponents();
-        assertEquals(3, cc.size());        
-        for (var set : cc) {
-            for (String element : set)
-                System.out.println(element);
-            System.out.println();
-        }
+        assertEquals(3, cc.size());
+    }
+
+    @Test
+    public void testThrowsDijkstra(){
+        int num = 6;
+        for (char a = 'A'; a < 'A' + num; a++)
+            matrixUndir.addVertex(new String(new char[] { a }));
+        matrixUndir.addEdge("A", "B");
+        matrixUndir.addEdge("A", "C");
+        matrixUndir.addEdge("D", "B");
+        matrixUndir.addEdge("E", "A");
+        matrixUndir.addEdge("E", "F");
+        assertThrows(UnsupportedOperationException.class, () -> matrixUndir.getDijkstraShortestPaths("A"));
     }
 }
