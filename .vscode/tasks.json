@@ -7,7 +7,7 @@
             "elements": [
                 "${compileOutput}",
                 "${dependencies}",
-                "${workspaceFolde}"
+                "${workspaceFolder}"
             ],
             "problemMatcher": [],
             "label": "Export jar with source code"
