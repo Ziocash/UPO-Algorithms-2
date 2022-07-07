@@ -6,15 +6,16 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
 import upo.graph.base.Graph;
 import upo.graph.base.VisitForest;
-import upo.graph.base.WeightedGraph;
 import upo.graph.base.VisitForest.Color;
 import upo.graph.base.VisitForest.VisitType;
+import upo.graph.base.WeightedGraph;
 
 public class AdjMatrixUndirWeight implements WeightedGraph {
 
@@ -91,8 +92,8 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
         if (!containsVertex(vertex2))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
 
-        return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)] > 0
-                && matrix[getVertexIndex(vertex2)][getVertexIndex(vertex1)] > 0;
+        return getEdgeWeight(vertex1, vertex2) > 0
+                && getEdgeWeight(vertex2, vertex1) > 0;
     }
 
     @Override
@@ -110,8 +111,7 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex + "\'.");
         Set<String> internalSet = new TreeSet<>();
         for (String element : vertices)
-            if (matrix[getVertexIndex(vertex)][getVertexIndex(element)] > 0
-                    || matrix[getVertexIndex(element)][getVertexIndex(vertex)] > 0) 
+            if (containsEdge(vertex, element))
                 internalSet.add((element));
         return internalSet;
     }
@@ -308,9 +308,42 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     }
 
     @Override
-    public WeightedGraph getDijkstraShortestPaths(String arg0)
+    public WeightedGraph getDijkstraShortestPaths(String vertex)
             throws UnsupportedOperationException, IllegalArgumentException {
-        throw new UnsupportedOperationException(NOT_IMPLEMENTED);
+        if(!containsVertex(vertex))
+            throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex + "\'.");
+
+        AdjMatrixUndirWeight graph = new AdjMatrixUndirWeight();
+        var minHeap = new PriorityQueue<String>();
+        double[] distances = new double[size()];
+        for (String s : vertices) {
+            minHeap.add(s);
+            distances[getVertexIndex(s)] = Double.MAX_VALUE;
+        }
+        distances[getVertexIndex(vertex)] = 0;
+
+        while (!minHeap.isEmpty()) {
+            var current = minHeap.remove();
+            graph.addVertex(current);
+            for (String adj : getAdjacent(current))
+                if (distances[getVertexIndex(adj)] > distances[getVertexIndex(current)] + getEdgeWeight(current, adj)) {
+                    distances[getVertexIndex(adj)] = distances[getVertexIndex(current)] + getEdgeWeight(current, adj);
+                }
+        }
+        buildDijkstraGraph(graph, distances);
+        return graph;
+
+    }
+
+    private void buildDijkstraGraph(AdjMatrixUndirWeight graph, double[] distances) {
+        for (String s : vertices) {
+            for (String adj : getAdjacent(s)) {
+                if (Math.abs(distances[getVertexIndex(s)] - distances[getVertexIndex(adj)]) == getEdgeWeight(s, adj)) {
+                    graph.addEdge(s, adj);
+                    graph.setEdgeWeight(s, adj, getEdgeWeight(s, adj));
+                }
+            }
+        }
     }
 
     @Override
@@ -320,7 +353,7 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
         if (!containsVertex(vertex2))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
-        
+
         return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)];
     }
 
