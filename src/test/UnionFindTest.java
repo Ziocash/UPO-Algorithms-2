@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.Test;
 
-import upo.union.UnionFind;
+import upo.union20025432.UnionFind;
 
 public class UnionFindTest {
     UnionFind unionFind = new UnionFind();
