@@ -49,14 +49,14 @@ public class UnionFind {
      * @param element1 Element in the first collection, it will be the new
      *                 collection root
      * @param element2 Element in the second collection
-     * @throws ScemoDiMerdaException
+     * @throws IllegalArgumentException
      */
     public void union(Integer element1, Integer element2) throws IllegalArgumentException {
         int index1 = search(find(element1));
         int index2 = search(find(element2));
         if(index1 == index2)
             throw new IllegalArgumentException("Cannot merge the same set to itself.");
-
+            
         if (index1 > -1 && index2 > -1) {
             collections.get(index1).addAll(collections.get(index2));
             collections.remove(collections.get(index2));
