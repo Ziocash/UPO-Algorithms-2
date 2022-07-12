@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.NoSuchElementException;
+
 import org.junit.Test;
 
 import upo.graph20025432.AdjMatrixUndir;
@@ -67,6 +69,7 @@ public class AdjMatrixUndirTest {
         tempEqualsMatrix.addEdge("C", "D");
 
         assertTrue(matrixUndir.equals(tempEqualsMatrix));
+        assertThrows(NoSuchElementException.class, () -> matrixUndir.getEdgeWeight("A", "C"));
 
     }
 
@@ -80,6 +83,7 @@ public class AdjMatrixUndirTest {
         assertEquals(2, matrixUndir.addVertex("C"));
         assertEquals(2, tempEqualsMatrix.addVertex("C"));
         assertEquals(3, matrixUndir.addVertex("D"));
+        assertEquals(3, tempEqualsMatrix.addVertex("D"));
 
         matrixUndir.addEdge("A", "B");
         tempEqualsMatrix.addEdge("A", "B");
@@ -168,7 +172,7 @@ public class AdjMatrixUndirTest {
         matrixUndir.addEdge("E", "A");
         matrixUndir.addEdge("E", "F");
         assertEquals(1.0, matrixUndir.getEdgeWeight("A", "B"));
-        assertEquals(0.0, matrixUndir.getEdgeWeight("A", "D"));
+        assertThrows(NoSuchElementException.class,() -> matrixUndir.getEdgeWeight("A", "D"));
     }
 
     @Test

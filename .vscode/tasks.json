@@ -3,14 +3,42 @@
     "tasks": [
         {
             "type": "java",
-            "targetPath": "${workspaceFolder}/${workspaceFolderBasename}.jar",
+            "targetPath": "${workspaceFolder}/pratico-1.jar",
+            "elements": [
+                "${compileOutput}/upo/graph20025432/",
+                "${dependencies}",
+                "${workspaceFolder}/src/upo/graph20025432/"
+            ],
+            "problemMatcher": [],
+            "label": "Export pratico1.jar jar with source code"
+        },
+        {
+            "type": "java",
+            "targetPath": "${workspaceFolder}/pratico-2.jar",
+            "elements": [
+                "${compileOutput}/upo/union20025432/",
+                "${compileOutput}/upo/progdin20025432/",
+                "${dependencies}",
+                "${workspaceFolder}/src/upo/progdin20025432/",
+                "${workspaceFolder}/src/upo/union20025432/"
+            ],
+            "problemMatcher": [],
+            "label": "Export pratico2.jar with source code"
+        },
+        {
+            "type": "java",
+            "targetPath": "${workspaceFolder}/test_complete.jar",
             "elements": [
                 "${compileOutput}",
+                "${testCompileOutput}",
                 "${dependencies}",
+                "${testDependencies}",
+                "${workspaceFolder}",
                 "${workspaceFolder}"
             ],
             "problemMatcher": [],
-            "label": "Export jar with source code"
+            "label": "Export test_complete.jar with source code"
         }
+
     ]
 }

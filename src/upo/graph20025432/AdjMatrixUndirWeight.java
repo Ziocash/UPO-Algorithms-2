@@ -11,7 +11,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
-import upo.graph.base.Graph;
 import upo.graph.base.VisitForest;
 import upo.graph.base.VisitForest.Color;
 import upo.graph.base.VisitForest.VisitType;
@@ -92,8 +91,8 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
         if (!containsVertex(vertex2))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
 
-        return getEdgeWeight(vertex1, vertex2) > 0
-                && getEdgeWeight(vertex2, vertex1) > 0;
+        return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)] > 0
+                && matrix[getVertexIndex(vertex2)][getVertexIndex(vertex1)] > 0;
     }
 
     @Override
@@ -310,7 +309,7 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     @Override
     public WeightedGraph getDijkstraShortestPaths(String vertex)
             throws UnsupportedOperationException, IllegalArgumentException {
-        if(!containsVertex(vertex))
+        if (!containsVertex(vertex))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex + "\'.");
 
         AdjMatrixUndirWeight graph = new AdjMatrixUndirWeight();
@@ -353,8 +352,9 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
         if (!containsVertex(vertex2))
             throw new IllegalArgumentException(GRAPH_NOT_CONTAINING + vertex1 + "\'.");
-
-        return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)];
+        if (containsEdge(vertex1, vertex2))
+            return matrix[getVertexIndex(vertex1)][getVertexIndex(vertex2)];
+        throw new NoSuchElementException(GRAPH_NOT_CONTAINING + vertex1 + "\' connected with \'" + vertex2 + "\'");
     }
 
     @Override
@@ -385,7 +385,7 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
             return false;
         if (graph.getClass() != getClass())
             return false;
-        Graph comparedTo = (AdjMatrixUndirWeight) graph;
+        AdjMatrixUndirWeight comparedTo = (AdjMatrixUndirWeight) graph;
 
         if (comparedTo.size() != size())
             return false;
@@ -393,16 +393,24 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
         for (int i = 0; i < size(); i++)
             if (comparedTo.getVertexLabel(i) != vertices.get(i))
                 return false;
+        return compareEdges(comparedTo);
+    }
+
+    private boolean compareEdges(WeightedGraph comparedTo) {
         for (int i = 0; i < size(); i++)
             for (int j = 0; j < size(); j++) {
                 if (comparedTo.containsEdge(comparedTo.getVertexLabel(i),
                         comparedTo.getVertexLabel(j)) != containsEdge(vertices.get(i), vertices.get(j)))
                     return false;
-                if (getEdgeWeight(comparedTo.getVertexLabel(i),
-                        comparedTo.getVertexLabel(j)) != getEdgeWeight(vertices.get(i), vertices.get(j)))
+                if (comparedTo.containsEdge(comparedTo.getVertexLabel(i), comparedTo.getVertexLabel(j))
+                        && containsEdge(vertices.get(i), vertices.get(j))
+                        && getEdgeWeight(vertices.get(i), vertices.get(j)) != comparedTo
+                                .getEdgeWeight(comparedTo.getVertexLabel(i), comparedTo.getVertexLabel(j))) {
                     return false;
+                }
             }
         return true;
+
     }
 
     @Override

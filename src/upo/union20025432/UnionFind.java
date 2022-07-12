@@ -12,7 +12,7 @@ public class UnionFind {
     private ArrayList<ArrayList<Integer>> collections;
 
     public UnionFind() {
-        collections = new ArrayList<ArrayList<Integer>>();
+        collections = new ArrayList<>();
     }
 
     private boolean exists(Integer value) {
