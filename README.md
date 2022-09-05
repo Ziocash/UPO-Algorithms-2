@@ -2,7 +2,7 @@
 
 Graph representations for Algorithms 2 - Sperimental Lab course at [UNIUPO](https://www.uniupo.it)
 
-## Included representation
+## Included representations
 
 - [Adjacency Undirected Matrix](./src/upo/graph20025432/AdjMatrixUndir.java)
 - [Adjacency Unidrected Weighted Matrix](./src/upo/graph20025432/AdjMatrixUndirWeight.java)
