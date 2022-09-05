@@ -7,7 +7,7 @@ Graph representations for Algorithms 2 - Sperimental Lab course at [UNIUPO](http
 - [Adjacency Undirected Matrix](./src/upo/graph20025432/AdjMatrixUndir.java)
 - [Adjacency Unidrected Weighted Matrix](./src/upo/graph20025432/AdjMatrixUndirWeight.java)
 - [Longest Common Subsequence](./src/upo/progdin20025432/LongestCommonSubsequence.java)
-- [UnionFind](./src/upo/progdin20025432/LongestCommonSubsequence.java)
+- [UnionFind](./src/upo/union20025432/UnionFind.java)
 
 ## Contributing
 
