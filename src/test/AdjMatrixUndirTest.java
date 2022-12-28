@@ -25,6 +25,17 @@ public class AdjMatrixUndirTest {
     }
 
     @Test
+    public void testAddVertexCopy() {
+        assertEquals(0, matrixUndir.addVertex("A"));
+        assertEquals(1, matrixUndir.addVertex("B"));
+        assertEquals(2, matrixUndir.addVertex("C"));
+        matrixUndir.addEdge("A", "B");
+        matrixUndir.addVertex("D");
+        assertTrue(matrixUndir.containsEdge("A", "B"));
+        assertTrue(matrixUndir.containsEdge("B", "A"));
+    }
+
+    @Test
     public void testContainsVertex() {
         assertEquals(0, matrixUndir.addVertex("A"));
         assertEquals(1, matrixUndir.addVertex("B"));

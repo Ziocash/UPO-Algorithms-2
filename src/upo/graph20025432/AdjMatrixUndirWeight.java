@@ -45,10 +45,12 @@ public class AdjMatrixUndirWeight implements WeightedGraph {
     @Override
     public int addVertex(String vertex) {
         vertices.add(vertex);
-        var backupMatrix = new double[size()][size()];
+        var backupMatrix = matrix.clone();
         int index = size() - 1;
         matrix = new double[size()][size()];
-        System.arraycopy(matrix, 0, backupMatrix, 0, size());
+        for(int i = 0; i < index; i++)
+            System.arraycopy(backupMatrix[i], 0, matrix[i], 0, backupMatrix.length);
+        
         return index;
     }
 
